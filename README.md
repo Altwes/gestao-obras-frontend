@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏗️ SOP-CE - Gestão de Obras (Front-end)
 
-## Getting Started
+O **SOP-CE** é uma plataforma de monitoramento de obras focada no controle de orçamentos e medições físicas. Este front-end foi desenvolvido para oferecer uma interface moderna, rápida e integrada ao motor de regras de negócio da SOP.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Tecnologias e Padrões (Obrigatórios)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Este projeto foi construído seguindo rigorosamente o cronograma técnico:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Next.js**: Framework React para renderização de alta performance.
+* **TailwindCSS & Flowbite**: Estilização baseada em utilitários e componentes UI para tabelas expansíveis e modais.
+* **Axios**: Cliente HTTP configurado com Interceptors para gestão de tokens JWT.
+* **Autenticação JWT**: Sistema de login seguro com persistência de sessão.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📋 Funcionalidades de Negócio Implementadas
 
-To learn more about Next.js, take a look at the following resources:
+* **Dashboard de Obras**: Listagem dinâmica de orçamentos com barra de pesquisa por protocolo.
+* **Tabela de Medições Inteligente**: Uso de componentes Flowbite para detalhamento de itens através de expansão de linhas.
+* **Recálculo Automático de Valores**: Lógica integrada que atualiza o total da medição instantaneamente ao editar quantidades.
+* **Segurança de Status**: Interface bloqueia edições em medições já VALIDADAS e impede finalização de orçamentos com pendências.
+* **Tratamento de Erros de Banco**: Mensagens personalizadas para protocolos duplicados e erros de integridade JPA.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚙️ Instalação e Execução Local
 
-## Deploy on Vercel
+1.  **Clone o repositório**:
+    ```bash
+    git clone [https://github.com/seu-usuario/gestao-obras-frontend.git](https://github.com/seu-usuario/gestao-obras-frontend.git)
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2.  **Instale as dependências**:
+    ```bash
+    npm install
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3.  **Configuração de Ambiente**:
+    Crie um arquivo `.env.local` na raiz e adicione a URL da sua API:
+    ```env
+    NEXT_PUBLIC_API_URL=[https://gestao-obras-api-2x56.onrender.com](https://gestao-obras-api-2x56.onrender.com)
+    NEXT_PUBLIC_STORAGE_TOKEN_KEY=@gestao-obras:token
+    ```
+
+4.  **Rode o projeto**:
+    ```bash
+    npm run dev
+    ```
