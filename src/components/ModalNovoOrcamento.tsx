@@ -98,7 +98,7 @@ export function ModalNovoOrcamento({ isOpen, onClose, onSuccess, obraParaEditar,
 
   const adicionarItem = () => setForm({ ...form, itens: [...form.itens, { descricao: '', quantidade: 1, valorUnitario: 0 }] });
   const removerItem = (index: number) => setForm({ ...form, itens: form.itens.filter((_, i) => i !== index) });
-  
+
   const handleItemChange = (index: number, field: string, value: any) => {
     const novosItens = [...form.itens];
     novosItens[index] = { ...novosItens[index], [field]: value };
@@ -110,7 +110,7 @@ export function ModalNovoOrcamento({ isOpen, onClose, onSuccess, obraParaEditar,
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 font-sans">
       <div className="bg-white dark:bg-gray-800 w-full max-w-4xl max-h-[95vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
-        
+
         {/* Header - Padrão SOP-CE */}
         <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700/30">
           <div>
@@ -164,42 +164,76 @@ export function ModalNovoOrcamento({ isOpen, onClose, onSuccess, obraParaEditar,
               <h4 className="font-bold dark:text-gray-300 flex items-center gap-2 uppercase text-xs">
                 <HiCheckCircle className="text-green-500" /> Planilha de Itens Orçados
               </h4>
-              <button 
-                type="button" 
-                onClick={adicionarItem} 
+              <button
+                type="button"
+                onClick={adicionarItem}
                 className="bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-tighter hover:bg-blue-700 hover:text-white transition-all"
               >
                 + Adicionar Item
               </button>
             </div>
-            
+
             <div className="space-y-2">
               {form.itens.map((item, index) => (
-                <div key={index} className="flex gap-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-2xl items-center border border-transparent hover:border-gray-200 transition-all">
-                  <input 
-                    placeholder="Descrição do serviço..."
-                    className="flex-1 p-2 rounded-lg border dark:bg-gray-800 dark:text-white text-sm outline-none focus:ring-2 focus:ring-blue-500" 
-                    value={item.descricao} 
-                    onChange={e => handleItemChange(index, 'descricao', e.target.value)} 
-                    required 
-                  />
-                  <div className="flex flex-col items-center">
-                    <span className="text-[8px] font-bold text-gray-400 uppercase">Qtd</span>
-                    <input type="number" className="w-16 p-2 rounded-lg border dark:bg-gray-800 dark:text-white text-sm text-center" value={item.quantidade} onChange={e => handleItemChange(index, 'quantidade', e.target.value)} required />
+                <div
+                  key={index}
+                  className="flex flex-col md:flex-row gap-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl items-start md:items-center border border-transparent hover:border-gray-200 transition-all"
+                >
+                  {/* Descrição: Ocupa a largura toda no mobile (flex-1) */}
+                  <div className="w-full flex-1">
+                    <label className="block md:hidden text-[8px] font-black text-gray-400 uppercase mb-1">Descrição do Serviço</label>
+                    <input
+                      placeholder="Descrição do serviço..."
+                      className="w-full p-3 md:p-2 rounded-lg border dark:bg-gray-800 dark:text-white text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                      value={item.descricao}
+                      onChange={e => handleItemChange(index, 'descricao', e.target.value)}
+                      required
+                    />
                   </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-[8px] font-bold text-gray-400 uppercase">Unitário</span>
-                    <input type="number" step="0.01" className="w-24 p-2 rounded-lg border dark:bg-gray-800 dark:text-white text-sm text-right" value={item.valorUnitario} onChange={e => handleItemChange(index, 'valorUnitario', e.target.value)} required />
+
+                  {/* Container para os valores e lixeira: Fica embaixo da descrição no mobile */}
+                  <div className="w-full md:w-auto flex flex-wrap items-center justify-between md:justify-start gap-4 md:gap-2">
+
+                    <div className="flex flex-col md:flex-row md:items-center gap-1">
+                      <span className="text-[8px] font-bold text-gray-400 uppercase">Qtd</span>
+                      <input
+                        type="number"
+                        className="w-16 p-2 rounded-lg border dark:bg-gray-800 dark:text-white text-sm text-center"
+                        value={item.quantidade}
+                        onChange={e => handleItemChange(index, 'quantidade', e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="flex flex-col md:flex-row md:items-center gap-1">
+                      <span className="text-[8px] font-bold text-gray-400 uppercase">Unitário</span>
+                      <input
+                        type="number"
+                        step="0.01"
+                        className="w-24 p-2 rounded-lg border dark:bg-gray-800 dark:text-white text-sm text-right"
+                        value={item.valorUnitario}
+                        onChange={e => handleItemChange(index, 'valorUnitario', e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="flex flex-col md:flex-row md:items-center gap-1">
+                      <span className="text-[8px] font-bold text-gray-400 uppercase">Subtotal</span>
+                      <span className="font-black text-blue-800 dark:text-blue-400 text-xs whitespace-nowrap">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(item.quantidade) * Number(item.valorUnitario))}
+                      </span>
+                    </div>
+
+                    {/* Lixeira: Posicionada estrategicamente no canto no mobile */}
+                    <button
+                      type="button"
+                      onClick={() => removerItem(index)}
+                      className="p-3 md:p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors ml-auto"
+                      disabled={form.itens.length === 1}
+                    >
+                      <HiTrash className="w-6 h-6 md:w-5 h-5" />
+                    </button>
                   </div>
-                  <div className="w-28 text-right flex flex-col">
-                    <span className="text-[8px] font-bold text-gray-400 uppercase">Subtotal</span>
-                    <span className="font-black text-blue-800 dark:text-blue-400 text-xs">
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(item.quantidade) * Number(item.valorUnitario))}
-                    </span>
-                  </div>
-                  <button type="button" onClick={() => removerItem(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" disabled={form.itens.length === 1}>
-                    <HiTrash className="w-5 h-5" />
-                  </button>
                 </div>
               ))}
             </div>
@@ -209,18 +243,18 @@ export function ModalNovoOrcamento({ isOpen, onClose, onSuccess, obraParaEditar,
         <div className="p-6 border-t bg-gray-50 dark:bg-gray-700/30 flex justify-between items-center">
           <div className="flex flex-col">
             <span className="text-[10px] font-black text-gray-400 tracking-widest uppercase">Investimento Global</span>
-            <span className="text-3xl font-black text-blue-800 dark:text-blue-400 tracking-tighter">
+            <span className="text-xl font-black text-blue-800 dark:text-blue-400 tracking-tighter">
               {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalGlobal)}
             </span>
           </div>
           <div className="flex gap-3">
             <button type="button" onClick={onClose} className="px-6 py-2 font-black text-gray-500 uppercase text-xs tracking-widest hover:text-gray-800">Cancelar</button>
-            <button 
-              onClick={handleSalvar} 
+            <button
+              onClick={handleSalvar}
               className="flex items-center gap-2 px-10 py-4 bg-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/30 hover:bg-blue-800 active:scale-95 transition-all uppercase text-xs tracking-widest"
             >
               <HiSave className="w-4 h-4" />
-              {loading ? "Processando..." : obraParaEditar ? "Atualizar Dados" : "Salvar Processo"}
+              {loading ? "Processando..." : obraParaEditar ? "Atualizar" : "Salvar"}
             </button>
           </div>
         </div>
