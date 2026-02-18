@@ -4,13 +4,17 @@ import { useState } from 'react';
 import { api } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '@/store/slices/authSlice';
 
 export default function LoginPage() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
+  const dispatch = useDispatch();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -19,7 +23,9 @@ export default function LoginPage() {
 
     try {
       const response = await api.post('/auth/login', { login, senha });
-      localStorage.setItem('@gestao-obras:token', response.data.dados.token);
+      const token = response.data.dados.token;
+      localStorage.setItem('@gestao-obras:token', token);
+      dispatch(loginSuccess(token));
       router.push('/dashboard');
     } catch (err: any) {
       setErro('Acesso Negado: Credenciais inválidas.');
