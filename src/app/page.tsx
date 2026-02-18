@@ -23,11 +23,16 @@ export default function LoginPage() {
 
     try {
       const response = await api.post('/auth/login', { login, senha });
-      const token = response.data.dados.token;
+      const { token } = response.data.dados;
+      dispatch(loginSuccess({
+        token,
+        usuario: login
+      }));
       localStorage.setItem('@gestao-obras:token', token);
-      dispatch(loginSuccess(token));
       router.push('/dashboard');
+
     } catch (err: any) {
+      console.error(err);
       setErro('Acesso Negado: Credenciais inválidas.');
     } finally {
       setLoading(false);

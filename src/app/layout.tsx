@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/app/providers";
 import { InstallPWA } from "@/components/InstallPWA";
 import { SyncManager } from "@/components/SyncManager";
+import { AuthGuard } from "@/components/AuthGuard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,9 +47,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <InstallPWA />
-          <SyncManager />
-          {children}
+          <AuthGuard>
+            <InstallPWA />
+            <SyncManager />
+            {children}
+          </AuthGuard>
         </Providers>
       </body>
     </html>
