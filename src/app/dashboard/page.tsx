@@ -8,7 +8,7 @@ import { setOrcamentos } from '@/store/slices/dataSlice';
 import { logout } from '@/store/slices/authSlice';
 import { api } from '@/services/api';
 
-import { HiLogout, HiPlus, HiPencil, HiTrash } from 'react-icons/hi';
+import { HiLogout, HiPlus, HiPencil } from 'react-icons/hi';
 import { ModalMedicao } from '@/components/ModalMedicao';
 import { ModalNovoOrcamento } from '@/components/ModalNovoOrcamento';
 import { ModalDetalhesOrcamento } from '@/components/ModalDetalhesOrcamento';
@@ -64,25 +64,6 @@ export default function DashboardPage() {
 	const handleLogout = () => {
 		dispatch(logout());
 		router.push('/');
-	};
-
-	const handleTentarExcluir = (id: number) => {
-		setConfirmacao({
-			open: true,
-			titulo: "Excluir Orçamento?",
-			msg: "Esta ação é permanente. O orçamento e seus itens serão removidos do sistema.",
-			onConfirm: () => realizarExclusao(id)
-		});
-	};
-
-	const realizarExclusao = async (id: number) => {
-		try {
-			await api.delete(`api/orcamentos/${id}`);
-			showAlert('sucesso', 'Orçamento removido com sucesso!');
-			fetchOrcamentos();
-		} catch (err: any) {
-			showAlert('erro', err.response?.data?.mensagem || 'Erro ao excluir.');
-		}
 	};
 
 	return (
@@ -164,7 +145,6 @@ export default function DashboardPage() {
 												<>
 													<button onClick={() => setObraParaMedir(obra)} className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-lg hover:bg-blue-700 hover:text-white transition-all whitespace-nowrap">Medir</button>
 													<button onClick={() => { setObraParaEditar(obra); setIsModalNovoOpen(true); }} className="p-2 text-amber-600 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-lg transition-colors"><HiPencil className="w-4 h-4" /></button>
-													<button onClick={() => handleTentarExcluir(obra.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"><HiTrash className="w-4 h-4" /></button>
 												</>
 											)}
 										</td>
